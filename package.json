@@ -1,8 +1,0 @@
-{
-  "name": "sooliming",
-  "version": "1.0.0", 
-  "description": "cpm梁站咖喱soo刷成就",
-  "scripts": {
-    "start": "npx serve -s ."
-  }
-}
