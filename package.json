@@ -1,8 +1,0 @@
-{
-  "name": "sooliming",
-  "version": "1.0.0",
-  "description": "Car Parking 1 Game Management",
-  "scripts": {
-    "start": "npx serve -s ."
-  }
-}
