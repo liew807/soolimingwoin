@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星悦娱乐 - 虚拟游戏平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c0c2e, #1a1a4a, #2d2d6e);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 登录界面样式 */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+        
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            color: #ffcc00;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #ff0080, #ff8c00);
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.02);
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .register-link a {
+            color: #ffcc00;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* 主界面样式 */
+        .main-content {
+            display: none;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 0 0 10px #ffcc00;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .balance {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .user-welcome {
+            color: #ffcc00;
+        }
+        
+        /* 标题样式 */
+        .header {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        
+        .glowing-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #ff0080, #ff8c00, #40e0d0, #ff0080);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 8s ease infinite, glow 2s ease-in-out infinite alternate;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            to { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6); }
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+        
+        /* 充值界面样式 */
+        .recharge-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            display: none;
+        }
+        
+        .recharge-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #ffcc00;
+            text-align: center;
+        }
+        
+        .recharge-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .recharge-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .recharge-option:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .recharge-option.active {
+            border-color: #ffcc00;
+            background: rgba(255, 204, 0, 0.1);
+        }
+        
+        .recharge-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .recharge-bonus {
+            font-size: 0.9rem;
+            color: #ffcc00;
+        }
+        
+        .qr-payment-section {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: white;
+            margin: 0 auto 20px;
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #333;
+            text-align: center;
+        }
+        
+        .payment-instructions {
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .payment-method {
+            text-align: center;
+        }
+        
+        .payment-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ffcc00;
+        }
+        
+        /* 游戏区域样式 */
+        .games-section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #ffcc00;
+            text-align: center;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+        
+        .game-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .game-desc {
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .play-btn {
+            background: linear-gradient(45deg, #ff0080, #ff8c00);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* 游戏界面样式 */
+        .game-interface {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .bet-controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .bet-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .bet-btn.active {
+            background: #ffcc00;
+            color: #000;
+        }
+        
+        .game-area {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .result-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 15px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            background: linear-gradient(45deg, #ff0080, #ff8c00);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        /* 老虎机样式 */
+        .slot-machine {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .slot-reel {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            transition: transform 0.5s;
+        }
+        
+        .spinning {
+            animation: spin 0.2s infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+        
+        /* 卡片游戏样式 */
+        .card-game {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            width: 80px;
+            height: 120px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card.red {
+            color: #e74c3c;
+        }
+        
+        .card.black {
+            color: #2c3e50;
+        }
+        
+        /* 赞助商样式 */
+        .sponsors {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .sponsors-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #ffcc00;
+        }
+        
+        .sponsor-logos {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .sponsor {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .sponsor:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sponsor i {
+            font-size: 2.5rem;
+            margin-right: 10px;
+            color: #ffcc00;
+        }
+        
+        .sponsor-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* 警告信息样式 */
+        .warning {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 4px solid #ff3333;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-title {
+            color: #ff6666;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .warning-title i {
+            margin-right: 10px;
+        }
+        
+        /* 页脚样式 */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .glowing-title {
+                font-size: 3rem;
+            }
+            
+            .sponsor-logos {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .bet-controls {
+                flex-wrap: wrap;
+            }
+            
+            .slot-reel {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+            
+            .card {
+                width: 60px;
+                height: 90px;
+                font-size: 1.2rem;
+            }
+            
+            .recharge-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .payment-methods {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录界面 -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-box">
+            <h2 class="login-title">用户登录</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" class="form-control" placeholder="请输入用户名" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" class="form-control" placeholder="请输入密码" required>
+                </div>
+                <button type="submit" class="btn btn-full">登录</button>
+            </form>
+            <div class="register-link">
+                <p>还没有账号？ <a href="#" id="showRegister">立即注册</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册界面 -->
+    <div id="registerContainer" class="login-container" style="display: none;">
+        <div class="login-box">
+            <h2 class="login-title">用户注册</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regUsername">用户名</label>
+                    <input type="text" id="regUsername" class="form-control" placeholder="请输入用户名" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">密码</label>
+                    <input type="password" id="regPassword" class="form-control" placeholder="请输入密码" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">确认密码</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="请再次输入密码" required>
+                </div>
+                <button type="submit" class="btn btn-full">注册</button>
+            </form>
+            <div class="register-link">
+                <p>已有账号？ <a href="#" id="showLogin">立即登录</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div id="mainContent" class="main-content">
+        <div class="container">
+            <!-- 导航栏 -->
+            <nav class="navbar">
+                <div class="logo">梁站集团</div>
+                <div class="user-info">
+                    <div class="balance">积分: <span id="userBalance">1000</span></div>
+                    <div class="user-welcome">欢迎, <span id="currentUser">用户</span></div>
+                    <button class="btn" onclick="showRecharge()">充值</button>
+                    <button class="logout-btn" onclick="logout()">退出登录</button>
+                </div>
+            </nav>
+            
+            <!-- 标题区域 -->
+            <header class="header">
+                <h1 class="glowing-title">梁站集团</h1>
+                <p class="subtitle">虚拟娱乐平台 · 理性参与 · 健康生活</p>
+            </header>
+            
+            <!-- 充值界面 -->
+            <div id="rechargeContainer" class="recharge-container">
+                <h2 class="recharge-title">积分充值</h2>
+                
+                <div class="recharge-options">
+                    <div class="recharge-option" onclick="selectRechargeAmount(1000, 1000)">
+                        <div class="recharge-amount">1000积分</div>
+                        <div class="recharge-bonus">¥10.00</div>
+                    </div>
+                    <div class="recharge-option" onclick="selectRechargeAmount(2000, 2000)">
+                        <div class="recharge-amount">2000积分</div>
+                        <div class="recharge-bonus">¥20.00</div>
+                    </div>
+                    <div class="recharge-option" onclick="selectRechargeAmount(5000, 5500)">
+                        <div class="recharge-amount">5500积分</div>
+                        <div class="recharge-bonus">¥50.00 (赠送500)</div>
+                    </div>
+                    <div class="recharge-option" onclick="selectRechargeAmount(10000, 12000)">
+                        <div class="recharge-amount">12000积分</div>
+                        <div class="recharge-bonus">¥100.00 (赠送2000)</div>
+                    </div>
+                    <div class="recharge-option" onclick="selectRechargeAmount(20000, 25000)">
+                        <div class="recharge-amount">25000积分</div>
+                        <div class="recharge-bonus">¥200.00 (赠送5000)</div>
+                    </div>
+                    <div class="recharge-option" onclick="selectRechargeAmount(50000, 70000)">
+                        <div class="recharge-amount">70000积分</div>
+                        <div class="recharge-bonus">¥500.00 (赠送20000)</div>
+                    </div>
+                </div>
+                
+                <div class="qr-payment-section">
+                    <h3>支付</h3>
+                    <div class="payment-methods">
+                        <div class="payment-method">
+                            <i class="fab fa-alipay payment-icon"></i>
+                            <div>支付宝</div>
+                        </div>
+                        <div class="payment-method">
+                            <i class="fab fa-weixin payment-icon"></i>
+                            <div>微信支付</div>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-code" id="qrCode">
+                        <!-- 这里会显示二维码 -->
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 10px;">📱</div>
+                            <div>请选择充值金额后<br>显示支付</div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-instructions">
+                        <p><strong>充值金额：</strong><span id="selectedAmount">0</span> 积分</p>
+                        <p><strong>支付金额：</strong>¥<span id="paymentAmount">0.00</span></p>
+                        <p>请使用支付宝或微信完成支付</p>
+                        <p>支付成功后积分将自动到账</p>
+                    </div>
+                    
+                    <button class="btn" onclick="simulatePayment()" id="payButton" disabled>支付完成</button>
+                    <button class="btn" onclick="hideRecharge()" style="background: rgba(255,255,255,0.1); margin-left: 10px;">取消充值</button>
+                </div>
+            </div>
+            
+            <!-- 游戏选择区域 -->
+            <section class="games-section">
+                <h2 class="section-title">娱乐游戏</h2>
+                <div class="games-grid">
+                    <div class="game-card" onclick="openGame('dice')">
+                        <div class="game-icon"><i class="fas fa-dice"></i></div>
+                        <h3 class="game-title">掷骰子</h3>
+                        <p class="game-desc">猜大小，测试你的运气</p>
+                        <button class="play-btn">开始游戏</button>
+                    </div>
+                    
+                    <div class="game-card" onclick="openGame('slots')">
+                        <div class="game-icon"><i class="fas fa-sliders-h"></i></div>
+                        <h3 class="game-title">幸运转盘</h3>
+                        <p class="game-desc">旋转赢取积分奖励</p>
+                        <button class="play-btn">开始游戏</button>
+                    </div>
+                    
+                    <div class="game-card" onclick="openGame('cards')">
+                        <div class="game-icon"><i class="fas fa-club"></i></div>
+                        <h3 class="game-title">21点</h3>
+                        <p class="game-desc">经典纸牌游戏</p>
+                        <button class="play-btn">开始游戏</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 游戏界面 -->
+            <div id="gameInterface" class="game-interface">
+                <div class="game-header">
+                    <h2 id="gameTitle">游戏名称</h2>
+                    <button class="back-btn" onclick="closeGame()">返回游戏列表</button>
+                </div>
+                
+                <div class="bet-controls">
+                    <button class="bet-btn" onclick="changeBet(10)">10积分</button>
+                    <button class="bet-btn active" onclick="changeBet(50)">50积分</button>
+                    <button class="bet-btn" onclick="changeBet(100)">100积分</button>
+                    <button class="bet-btn" onclick="changeBet(200)">200积分</button>
+                </div>
+                
+                <div class="game-area">
+                    <div id="gameDisplay">游戏区域</div>
+                    <div id="resultDisplay" class="result-display"></div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button id="actionBtn" class="action-btn" onclick="playGame()">开始游戏</button>
+                </div>
+            </div>
+            
+            <!-- 赞助商区域 -->
+            <section class="sponsors">
+                <h2 class="sponsors-title">赞助商</h2>
+                <div class="sponsor-logos">
+                    <div class="sponsor">
+                        <i class="fas fa-crown"></i>
+                        <span class="sponsor-name">梁站咖喱集团</span>
+                    </div>
+                    <div class="sponsor">
+                        <i class="fas fa-gem"></i>
+                        <span class="sponsor-name">Soo国际集团</span>
+                    </div>
+                    <div class="sponsor">
+                        <i class="fas fa-dragon"></i>
+                        <span class="sponsor-name">飞龙企业</span>
+                    </div>
+                    <div class="sponsor">
+                        <i class="fas fa-shield-alt"></i>
+                        <span class="sponsor-name">科技企业</span>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 警告信息 -->
+            <div class="warning">
+                <h3 class="warning-title"><i class="fas fa-exclamation-triangle"></i> 重要提醒</h3>
+                <p>本平台为虚拟娱乐网站，所有活动仅供娱乐目的，使用虚拟积分。我们坚决反对任何形式的非法赌博行为，并提醒用户理性参与娱乐活动，合理安排时间，享受健康生活。</p>
+            </div>
+            
+            <!-- 页脚 -->
+            <footer class="footer">
+                <p>© 2025 梁站集团 - 保留所有权利</p>
+                <p>本网站由winwin8创建，不涉及任何货币交易</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // 用户数据存储
+        let users = JSON.parse(localStorage.getItem('entertainmentUsers')) || [];
+        let currentUser = null;
+        
+        // 游戏数据
+        let userBalance = 1000;
+        let currentBet = 50;
+        let currentGame = '';
+        let selectedChoice = '';
+        let playerCards = [];
+        let dealerCards = [];
+        
+        // 充值数据
+        let selectedRechargeAmount = 0;
+        let selectedRechargeCredits = 0;
+        
+        // 游戏数据
+        const gameData = {
+            dice: {
+                title: '掷骰子游戏',
+                description: '猜大小游戏，猜对赢得双倍积分'
+            },
+            slots: {
+                title: '幸运转盘',
+                description: '转动转盘，匹配图案赢取奖励'
+            },
+            cards: {
+                title: '21点游戏',
+                description: '经典21点纸牌游戏'
+            }
+        };
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，初始化登录系统...');
+            
+            // 检查是否已登录
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    console.log('找到已登录用户:', currentUser.username);
+                    showMainContent();
+                } catch (e) {
+                    console.error('解析用户数据失败:', e);
+                    localStorage.removeItem('currentUser');
+                }
+            }
+            
+            // 登录表单提交
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('登录表单提交');
+                login();
+            });
+            
+            // 注册表单提交
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('注册表单提交');
+                register();
+            });
+            
+            // 切换登录/注册界面
+            document.getElementById('showRegister').addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('切换到注册界面');
+                showRegister();
+            });
+            
+            document.getElementById('showLogin').addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('切换到登录界面');
+                showLogin();
+            });
+            
+            console.log('登录系统初始化完成');
+        });
+        
+        // 显示注册界面
+        function showRegister() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('registerContainer').style.display = 'flex';
+        }
+        
+        // 显示登录界面
+        function showLogin() {
+            document.getElementById('registerContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'flex';
+        }
+        
+        // 用户登录
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            console.log('尝试登录:', username);
+            
+            if (!username || !password) {
+                alert('请输入用户名和密码！');
+                return;
+            }
+            
+            // 查找用户
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                console.log('登录成功');
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showMainContent();
+            } else {
+                console.log('登录失败：用户名或密码错误');
+                alert('用户名或密码错误！');
+            }
+        }
+        
+        // 用户注册
+        function register() {
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            console.log('尝试注册:', username);
+            
+            // 验证输入
+            if (!username || !password || !confirmPassword) {
+                alert('请填写所有字段！');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('两次输入的密码不一致！');
+                return;
+            }
+            
+            if (users.find(u => u.username === username)) {
+                alert('用户名已存在！');
+                return;
+            }
+            
+            // 创建新用户
+            const newUser = {
+                id: Date.now(),
+                username: username,
+                password: password,
+                balance: 1000,
+                registrationDate: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('entertainmentUsers', JSON.stringify(users));
+            
+            console.log('注册成功');
+            alert('注册成功！请登录。');
+            showLogin();
+        }
+        
+        // 显示主内容
+        function showMainContent() {
+            console.log('显示主内容');
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('registerContainer').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            
+            // 更新用户信息
+            document.getElementById('currentUser').textContent = currentUser.username;
+            userBalance = currentUser.balance;
+            updateBalance();
+        }
+        
+        // 退出登录
+        function logout() {
+            console.log('退出登录');
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'flex';
+            
+            // 重置表单
+            document.getElementById('loginForm').reset();
+            document.getElementById('registerForm').reset();
+        }
+        
+        // 显示充值界面
+        function showRecharge() {
+            document.getElementById('rechargeContainer').style.display = 'block';
+            // 重置选择状态
+            selectedRechargeAmount = 0;
+            selectedRechargeCredits = 0;
+            document.querySelectorAll('.recharge-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            document.getElementById('selectedAmount').textContent = '0';
+            document.getElementById('paymentAmount').textContent = '0.00';
+            document.getElementById('payButton').disabled = true;
+            
+            // 重置二维码显示
+            document.getElementById('qrCode').innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">📱</div>
+                    <div>请选择充值金额后<br>显示支付二维码</div>
+                </div>
+            `;
+        }
+        
+        // 隐藏充值界面
+        function hideRecharge() {
+            document.getElementById('rechargeContainer').style.display = 'none';
+        }
+        
+        // 选择充值金额
+        function selectRechargeAmount(amount, credits) {
+            selectedRechargeAmount = amount;
+            selectedRechargeCredits = credits;
+            
+            // 更新UI
+            document.querySelectorAll('.recharge-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            event.target.closest('.recharge-option').classList.add('active');
+            
+            document.getElementById('selectedAmount').textContent = credits;
+            document.getElementById('paymentAmount').textContent = (amount / 100).toFixed(2);
+            document.getElementById('payButton').disabled = false;
+            
+            // 生成二维码
+            generateQRCode(amount, credits);
+        }
+        
+        // 生成二维码
+        function generateQRCode(amount, credits) {
+            const qrCode = document.getElementById('qrCode');
+            qrCode.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">💰</div>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 10px; display: inline-block;">
+                        <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">支付方式</div>
+                        <div style="width: 150px; height: 150px; background: linear-gradient(45deg, #ff0080, #ff8c00); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; border-radius: 10px;">
+                            <div style="color: white; font-size: 0.8rem; text-align: center;">
+                                支付<br>¥${(amount / 100).toFixed(2)}<br>获取${credits}积分
+                            </div>
+                        </div>
+                        <div style="font-size: 0.8rem; color: #666;">请使用支付宝/微信方式</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 模拟支付完成
+        function simulatePayment() {
+            if (selectedRechargeAmount === 0) {
+                alert('请先选择充值金额！');
+                return;
+            }
+            
+            // 更新用户余额
+            userBalance += selectedRechargeCredits;
+            updateBalance();
+            
+            // 显示成功消息
+            alert(`充值成功！您已获得 ${selectedRechargeCredits} 积分！`);
+            
+            // 隐藏充值界面
+            hideRecharge();
+            
+            // 记录交易
+            recordTransaction(selectedRechargeAmount, selectedRechargeCredits);
+        }
+        
+        // 记录交易
+        function recordTransaction(amount, credits) {
+            const transaction = {
+                id: Date.now(),
+                userId: currentUser.id,
+                amount: amount,
+                credits: credits,
+                date: new Date().toISOString(),
+                type: 'recharge'
+            };
+            
+            let transactions = JSON.parse(localStorage.getItem('userTransactions')) || [];
+            transactions.push(transaction);
+            localStorage.setItem('userTransactions', JSON.stringify(transactions));
+        }
+        
+        // 打开游戏
+        function openGame(game) {
+            currentGame = game;
+            document.getElementById('gameTitle').textContent = gameData[game].title;
+            document.getElementById('gameInterface').style.display = 'block';
+            document.getElementById('resultDisplay').textContent = '';
+            
+            // 根据游戏类型设置不同的显示
+            if (game === 'dice') {
+                document.getElementById('gameDisplay').innerHTML = `
+                    <div style="font-size: 4rem;">🎲</div>
+                    <p>选择大小然后掷骰子</p>
+                    <div style="margin-top: 15px;">
+                        <button class="bet-btn" onclick="selectChoice('big')">大 (4-6)</button>
+                        <button class="bet-btn" onclick="selectChoice('small')">小 (1-3)</button>
+                    </div>
+                `;
+                document.getElementById('actionBtn').textContent = '掷骰子';
+            } else if (game === 'slots') {
+                document.getElementById('gameDisplay').innerHTML = `
+                    <div class="slot-machine">
+                        <div class="slot-reel" id="reel1">🍒</div>
+                        <div class="slot-reel" id="reel2">🍋</div>
+                        <div class="slot-reel" id="reel3">🍊</div>
+                    </div>
+                    <p>点击旋转开始游戏</p>
+                `;
+                document.getElementById('actionBtn').textContent = '旋转';
+            } else if (game === 'cards') {
+                startBlackjack();
+                document.getElementById('actionBtn').textContent = '要牌';
+            }
+        }
+        
+        // 关闭游戏
+        function closeGame() {
+            document.getElementById('gameInterface').style.display = 'none';
+            currentGame = '';
+            selectedChoice = '';
+        }
+        
+        // 改变下注
+        function changeBet(amount) {
+            currentBet = amount;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.bet-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // 选择骰子大小
+        function selectChoice(choice) {
+            selectedChoice = choice;
+            document.querySelectorAll('#gameDisplay .bet-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // 玩游戏
+        function playGame() {
+            if (userBalance < currentBet) {
+                alert('积分不足，请充值！');
+                return;
+            }
+            
+            // 扣除下注
+            userBalance -= currentBet;
+            updateBalance();
+            
+            let result = '';
+            let winAmount = 0;
+            
+            if (currentGame === 'dice') {
+                if (!selectedChoice) {
+                    alert('请先选择大小！');
+                    userBalance += currentBet;
+                    updateBalance();
+                    return;
+                }
+                
+                // 模拟掷骰子
+                const dice = Math.floor(Math.random() * 6) + 1;
+                document.getElementById('gameDisplay').innerHTML = `
+                    <div style="font-size: 4rem;">骰子: ${dice}</div>
+                `;
+                
+                // 判断输赢
+                const isWin = (selectedChoice === 'big' && dice > 3) || 
+                              (selectedChoice === 'small' && dice <= 3);
+                
+                if (isWin) {
+                    winAmount = currentBet * 2;
+                    userBalance += winAmount;
+                    result = `恭喜！你赢了 ${winAmount} 积分！`;
+                } else {
+                    result = '很遗憾，这次没有赢。';
+                }
+                
+            } else if (currentGame === 'slots') {
+                // 模拟老虎机
+                const symbols = ['🍒', '🍋', '🍊', '⭐', '🔔', '7️⃣'];
+                
+                // 添加旋转动画
+                const reels = document.querySelectorAll('.slot-reel');
+                reels.forEach(reel => {
+                    reel.classList.add('spinning');
+                });
+                
+                setTimeout(() => {
+                    reels.forEach(reel => {
+                        reel.classList.remove('spinning');
+                    });
+                    
+                    const spin = [
+                        symbols[Math.floor(Math.random() * symbols.length)],
+                        symbols[Math.floor(Math.random() * symbols.length)],
+                        symbols[Math.floor(Math.random() * symbols.length)]
+                    ];
+                    
+                    document.getElementById('reel1').textContent = spin[0];
+                    document.getElementById('reel2').textContent = spin[1];
+                    document.getElementById('reel3').textContent = spin[2];
+                    
+                    // 判断输赢
+                    if (spin[0] === spin[1] && spin[1] === spin[2]) {
+                        winAmount = currentBet * 5;
+                        userBalance += winAmount;
+                        result = `大奖！你赢了 ${winAmount} 积分！`;
+                    } else if (spin[0] === spin[1] || spin[1] === spin[2] || spin[0] === spin[2]) {
+                        winAmount = currentBet * 2;
+                        userBalance += winAmount;
+                        result = `不错！你赢了 ${winAmount} 积分！`;
+                    } else {
+                        result = '很遗憾，这次没有赢。';
+                    }
+                    
+                    updateBalance();
+                    document.getElementById('resultDisplay').textContent = result;
+                }, 1000);
+                
+                return;
+                
+            } else if (currentGame === 'cards') {
+                playBlackjack();
+                return;
+            }
+            
+            updateBalance();
+            document.getElementById('resultDisplay').textContent = result;
+        }
+        
+        // 21点游戏逻辑
+        function startBlackjack() {
+            playerCards = [];
+            dealerCards = [];
+            
+            // 初始发牌
+            playerCards.push(drawCard());
+            dealerCards.push(drawCard());
+            playerCards.push(drawCard());
+            
+            updateBlackjackDisplay();
+        }
+        
+        function playBlackjack() {
+            if (document.getElementById('actionBtn').textContent === '要牌') {
+                // 玩家要牌
+                playerCards.push(drawCard());
+                updateBlackjackDisplay();
+                
+                // 检查是否爆牌
+                if (calculateHandValue(playerCards) > 21) {
+                    document.getElementById('resultDisplay').textContent = '爆牌！你输了！';
+                    document.getElementById('actionBtn').textContent = '重新开始';
+                    return;
+                }
+            } else if (document.getElementById('actionBtn').textContent === '停牌') {
+                // 玩家停牌，庄家行动
+                while (calculateHandValue(dealerCards) < 17) {
+                    dealerCards.push(drawCard());
+                }
+                
+                updateBlackjackDisplay(true);
+                
+                const playerValue = calculateHandValue(playerCards);
+                const dealerValue = calculateHandValue(dealerCards);
+                
+                if (dealerValue > 21 || playerValue > dealerValue) {
+                    winAmount = currentBet * 2;
+                    userBalance += winAmount;
+                    document.getElementById('resultDisplay').textContent = `恭喜！你赢了 ${winAmount} 积分！`;
+                } else if (playerValue === dealerValue) {
+                    userBalance += currentBet; // 平局返还下注
+                    document.getElementById('resultDisplay').textContent = '平局！返还下注积分。';
+                } else {
+                    document.getElementById('resultDisplay').textContent = '庄家赢！你输了！';
+                }
+                
+                updateBalance();
+                document.getElementById('actionBtn').textContent = '重新开始';
+            } else if (document.getElementById('actionBtn').textContent === '重新开始') {
+                startBlackjack();
+                document.getElementById('resultDisplay').textContent = '';
+                document.getElementById('actionBtn').textContent = '要牌';
+            }
+        }
+        
+        function drawCard() {
+            const suits = ['♠', '♥', '♦', '♣'];
+            const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+            const suit = suits[Math.floor(Math.random() * suits.length)];
+            const value = values[Math.floor(Math.random() * values.length)];
+            return { suit, value };
+        }
+        
+        function calculateHandValue(cards) {
+            let value = 0;
+            let aces = 0;
+            
+            for (const card of cards) {
+                if (card.value === 'A') {
+                    aces++;
+                    value += 11;
+                } else if (['K', 'Q', 'J'].includes(card.value)) {
+                    value += 10;
+                } else {
+                    value += parseInt(card.value);
+                }
+            }
+            
+            // 处理Ace
+            while (value > 21 && aces > 0) {
+                value -= 10;
+                aces--;
+            }
+            
+            return value;
+        }
+        
+        function updateBlackjackDisplay(showDealerCards = false) {
+            let html = `
+                <div style="margin-bottom: 20px;">
+                    <h3>庄家牌:</h3>
+                    <div class="card-game">
+            `;
+            
+            if (showDealerCards) {
+                dealerCards.forEach(card => {
+                    const color = (card.suit === '♥' || card.suit === '♦') ? 'red' : 'black';
+                    html += `<div class="card ${color}">${card.value}${card.suit}</div>`;
+                });
+                html += `</div><p>点数: ${calculateHandValue(dealerCards)}</p>`;
+            } else {
+                html += `<div class="card">${dealerCards[0].value}${dealerCards[0].suit}</div>`;
+                html += `<div class="card">?</div>`;
+                html += `</div>`;
+            }
+            
+            html += `
+                </div>
+                <div>
+                    <h3>你的牌:</h3>
+                    <div class="card-game">
+            `;
+            
+            playerCards.forEach(card => {
+                const color = (card.suit === '♥' || card.suit === '♦') ? 'red' : 'black';
+                html += `<div class="card ${color}">${card.value}${card.suit}</div>`;
+            });
+            
+            html += `</div><p>点数: ${calculateHandValue(playerCards)}</p>`;
+            
+            document.getElementById('gameDisplay').innerHTML = html;
+            
+            // 更新按钮状态
+            if (calculateHandValue(playerCards) < 21) {
+                document.getElementById('actionBtn').textContent = '要牌';
+                document.getElementById('actionBtn').style.display = 'inline-block';
+                
+                // 添加停牌按钮
+                if (!document.getElementById('standBtn')) {
+                    const standBtn = document.createElement('button');
+                    standBtn.id = 'standBtn';
+                    standBtn.className = 'action-btn';
+                    standBtn.textContent = '停牌';
+                    standBtn.onclick = function() {
+                        document.getElementById('actionBtn').textContent = '停牌';
+                        playGame();
+                    };
+                    document.getElementById('gameDisplay').parentNode.appendChild(standBtn);
+                }
+            } else {
+                document.getElementById('actionBtn').textContent = '停牌';
+            }
+        }
+        
+        // 更新余额显示
+        function updateBalance() {
+            document.getElementById('userBalance').textContent = userBalance;
+            
+            // 更新用户数据
+            if (currentUser) {
+                currentUser.balance = userBalance;
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('entertainmentUsers', JSON.stringify(users));
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                }
+            }
+        }
+    </script>
+</body>
+</html>
