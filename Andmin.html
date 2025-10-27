@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梁站集团 - 开发者后台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c0c2e, #1a1a4a);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        /* 登录界面 */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .login-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 204, 0, 0.2);
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            color: #ffcc00;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #ccc;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #ffcc00;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #ff0080, #ff8c00);
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.02);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #ff3333, #ff6666);
+        }
+        
+        /* 主界面样式 */
+        .admin-container {
+            display: none;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px 0;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .nav-links {
+            list-style: none;
+        }
+        
+        .nav-links li {
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+            color: #ccc;
+        }
+        
+        .nav-links li:hover, .nav-links li.active {
+            background: rgba(255, 204, 0, 0.1);
+            border-left: 4px solid #ffcc00;
+            color: #fff;
+        }
+        
+        .nav-links i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffcc00;
+            margin: 10px 0;
+        }
+        
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+        
+        .user-list {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .user-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .user-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            color: #ffcc00;
+        }
+        
+        .user-balance {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 204, 0, 0.2);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .security-notice {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff3333;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .security-notice i {
+            color: #ff6666;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 开发者登录界面 -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-box">
+            <h2 class="login-title"><i class="fas fa-shield-alt"></i> 开发者认证</h2>
+            <div class="security-notice">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>安全提醒：</strong>此页面仅限授权开发者访问
+            </div>
+            <form id="developerLoginForm">
+                <div class="form-group">
+                    <label for="devUsername"><i class="fas fa-user"></i> 开发者账号</label>
+                    <input type="text" id="devUsername" class="form-control" placeholder="输入开发者账号" required>
+                </div>
+                <div class="form-group">
+                    <label for="devPassword"><i class="fas fa-lock"></i> 安全密钥</label>
+                    <input type="password" id="devPassword" class="form-control" placeholder="输入安全密钥" required>
+                </div>
+                <div class="form-group">
+                    <label for="devToken"><i class="fas fa-key"></i> 访问令牌</label>
+                    <input type="password" id="devToken" class="form-control" placeholder="输入访问令牌" required>
+                </div>
+                <button type="submit" class="btn">进入开发者后台</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 主管理界面 -->
+    <div id="adminContainer" class="admin-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-crown"></i> 开发者后台
+            </div>
+            <ul class="nav-links">
+                <li class="active" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> 控制台
+                </li>
+                <li onclick="showSection('users')">
+                    <i class="fas fa-users"></i> 用户管理
+                </li>
+                <li onclick="showSection('finance')">
+                    <i class="fas fa-coins"></i> 财务管理
+                </li>
+                <li onclick="showSection('games')">
+                    <i class="fas fa-gamepad"></i> 游戏管理
+                </li>
+                <li onclick="showSection('system')">
+                    <i class="fas fa-cog"></i> 系统设置
+                </li>
+                <li onclick="logout()" style="color: #ff6666;">
+                    <i class="fas fa-sign-out-alt"></i> 安全退出
+                </li>
+            </ul>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <div class="header">
+                <h1>开发者控制台</h1>
+                <div class="user-info">
+                    <span>开发者: <span id="devName">管理员</span></span>
+                    <span style="margin-left: 15px; color: #ffcc00;">安全模式: 已启用</span>
+                </div>
+            </div>
+
+            <!-- 控制台 -->
+            <div id="dashboard" class="content-section active">
+                <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> 系统概览</h2>
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <i class="fas fa-users fa-2x"></i>
+                        <div class="stat-number" id="totalUsers">0</div>
+                        <div>总用户数</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-coins fa-2x"></i>
+                        <div class="stat-number" id="totalBalance">0</div>
+                        <div>平台总积分</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-gamepad fa-2x"></i>
+                        <div class="stat-number" id="activeGames">3</div>
+                        <div>活跃游戏</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                        <div class="stat-number" id="todayRevenue">0</div>
+                        <div>今日营收</div>
+                    </div>
+                </div>
+
+                <div class="security-notice">
+                    <i class="fas fa-shield-alt"></i>
+                    <strong>开发者权限：</strong> 您拥有最高级别系统管理权限，请谨慎操作
+                </div>
+            </div>
+
+            <!-- 用户管理 -->
+            <div id="users" class="content-section">
+                <h2 class="section-title"><i class="fas fa-users"></i> 用户管理</h2>
+                <div class="user-list" id="userList">
+                    <!-- 用户列表将通过JS动态加载 -->
+                </div>
+            </div>
+
+            <!-- 财务管理 -->
+            <div id="finance" class="content-section">
+                <h2 class="section-title"><i class="fas fa-coins"></i> 积分管理</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>选择用户</label>
+                        <select id="selectUser" class="form-control">
+                            <option value="">请选择用户</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>操作类型</label>
+                        <select id="financeAction" class="form-control">
+                            <option value="add">增加积分</option>
+                            <option value="subtract">扣除积分</option>
+                            <option value="set">设置积分</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>积分数量</label>
+                    <input type="number" id="financeAmount" class="form-control" placeholder="输入积分数量">
+                </div>
+                <div class="form-group">
+                    <label>操作备注</label>
+                    <input type="text" id="financeNote" class="form-control" placeholder="输入操作备注">
+                </div>
+                <button class="btn" onclick="executeFinanceAction()">执行操作</button>
+            </div>
+
+            <!-- 游戏管理 -->
+            <div id="games" class="content-section">
+                <h2 class="section-title"><i class="fas fa-gamepad"></i> 游戏配置</h2>
+                <div class="form-group">
+                    <label>游戏状态控制</label>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button class="btn" onclick="setGameStatus('all', 'active')">开启所有游戏</button>
+                        <button class="btn btn-danger" onclick="setGameStatus('all', 'maintenance')">维护所有游戏</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 系统设置 -->
+            <div id="system" class="content-section">
+                <h2 class="section-title"><i class="fas fa-cog"></i> 系统配置</h2>
+                <div class="security-notice">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>高危操作区域：</strong> 以下操作将直接影响系统运行
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-danger" onclick="clearAllData()">清空所有数据</button>
+                    <button class="btn btn-danger" onclick="resetSystem()">系统重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 开发者认证配置
+        const DEVELOPER_CREDENTIALS = {
+            username: "admin",
+            password: "xy2024dev",
+            token: "XYENT2024SECURE"
+        };
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否已登录
+            const isLoggedIn = localStorage.getItem('devAuthenticated');
+            if (isLoggedIn === 'true') {
+                showAdminPanel();
+            }
+
+            // 开发者登录表单提交
+            document.getElementById('developerLoginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                authenticateDeveloper();
+            });
+
+            loadSystemStats();
+            loadUserList();
+        });
+
+        // 开发者认证
+        function authenticateDeveloper() {
+            const username = document.getElementById('devUsername').value;
+            const password = document.getElementById('devPassword').value;
+            const token = document.getElementById('devToken').value;
+
+            if (username === DEVELOPER_CREDENTIALS.username &&
+                password === DEVELOPER_CREDENTIALS.password &&
+                token === DEVELOPER_CREDENTIALS.token) {
+                
+                localStorage.setItem('devAuthenticated', 'true');
+                showAdminPanel();
+            } else {
+                alert('认证失败！请检查开发者凭据。');
+            }
+        }
+
+        // 显示管理面板
+        function showAdminPanel() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('adminContainer').style.display = 'flex';
+        }
+
+        // 安全退出
+        function logout() {
+            localStorage.removeItem('devAuthenticated');
+            location.reload();
+        }
+
+        // 切换内容区域
+        function showSection(sectionId) {
+            // 隐藏所有区域
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中区域
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航激活状态
+            document.querySelectorAll('.nav-links li').forEach(li => {
+                li.classList.remove('active');
+            });
+            event.target.closest('li').classList.add('active');
+        }
+
+        // 加载系统统计
+        function loadSystemStats() {
+            const users = JSON.parse(localStorage.getItem('entertainmentUsers')) || [];
+            const transactions = JSON.parse(localStorage.getItem('userTransactions')) || [];
+            
+            document.getElementById('totalUsers').textContent = users.length;
+            
+            const totalBalance = users.reduce((sum, user) => sum + (user.balance || 0), 0);
+            document.getElementById('totalBalance').textContent = totalBalance.toLocaleString();
+            
+            const todayRevenue = transactions
+                .filter(t => t.type === 'recharge' && isToday(new Date(t.date)))
+                .reduce((sum, t) => sum + t.amount, 0);
+            document.getElementById('todayRevenue').textContent = (todayRevenue / 100).toFixed(2);
+        }
+
+        // 加载用户列表
+        function loadUserList() {
+            const users = JSON.parse(localStorage.getItem('entertainmentUsers')) || [];
+            const userList = document.getElementById('userList');
+            const selectUser = document.getElementById('selectUser');
+            
+            userList.innerHTML = '';
+            selectUser.innerHTML = '<option value="">请选择用户</option>';
+            
+            users.forEach(user => {
+                // 用户列表
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+                userCard.innerHTML = `
+                    <div class="user-header">
+                        <div>
+                            <div class="user-name">${user.username}</div>
+                            <div>注册时间: ${new Date(user.registrationDate).toLocaleDateString()}</div>
+                        </div>
+                        <div class="user-balance">${user.balance} 积分</div>
+                    </div>
+                    <div class="user-actions">
+                        <button class="action-btn" onclick="addBalance(${user.id}, 1000)">+1000</button>
+                        <button class="action-btn" onclick="addBalance(${user.id}, 5000)">+5000</button>
+                        <button class="action-btn" onclick="setBalance(${user.id}, 1000)">设为1000</button>
+                        <button class="action-btn" onclick="resetUser(${user.id})" style="background: rgba(255,0,0,0.2);">重置</button>
+                    </div>
+                `;
+                userList.appendChild(userCard);
+                
+                // 下拉选择
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.username} (${user.balance}积分)`;
+                selectUser.appendChild(option);
+            });
+        }
+
+        // 工具函数
+        function isToday(date) {
+            const today = new Date();
+            return date.getDate() === today.getDate() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getFullYear() === today.getFullYear();
+        }
+
+        // 积分管理功能
+        function addBalance(userId, amount) {
+            const users = JSON.parse(localStorage.getItem('entertainmentUsers')) || [];
+            const userIndex = users.findIndex(u => u.id === userId);
+            
+            if (userIndex !== -1) {
+                users[userIndex].balance += amount;
+                localStorage.setItem('entertainmentUsers', JSON.stringify(users));
+                alert(`已为用户 ${users[userIndex].username} 增加 ${amount} 积分`);
+                loadSystemStats();
+                loadUserList();
+            }
+        }
+
+        function setBalance(userId, amount) {
+            const users = JSON.parse(localStorage.getItem('entertainmentUsers')) || [];
+            const userIndex = users.findIndex(u => u.id === userId);
+            
+            if (userIndex !== -1) {
+                users[userIndex].balance = amount;
+                localStorage.setItem('entertainmentUsers', JSON.stringify(users));
+                alert(`已将用户 ${users[userIndex].username} 积分设置为 ${amount}`);
+                loadSystemStats();
+                loadUserList();
+            }
+        }
+
+        function resetUser(userId) {
+            if (confirm('确定要重置此用户数据吗？')) {
+                const users = JSON.parse(localStorage.getItem('entertainmentUsers')) || [];
+                const userIndex = users.findIndex(u => u.id === userId);
+                
+                if (userIndex !== -1) {
+                    users[userIndex].balance = 1000;
+                    localStorage.setItem('entertainmentUsers', JSON.stringify(users));
+                    alert(`已重置用户 ${users[userIndex].username} 数据`);
+                    loadSystemStats();
+                    loadUserList();
+                }
+            }
+        }
+
+        // 执行财务操作
+        function executeFinanceAction() {
+            const userId = parseInt(document.getElementById('selectUser').value);
+            const action = document.getElementById('financeAction').value;
+            const amount = parseInt(document.getElementById('financeAmount').value);
+            const note = document.getElementById('financeNote').value;
+            
+            if (!userId || !amount) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('entertainmentUsers')) || [];
+            const userIndex = users.findIndex(u => u.id === userId);
+            
+            if (userIndex === -1) {
+                alert('用户不存在');
+                return;
+            }
+            
+            let newBalance = users[userIndex].balance;
+            
+            switch (action) {
+                case 'add':
+                    newBalance += amount;
+                    break;
+                case 'subtract':
+                    newBalance = Math.max(0, newBalance - amount);
+                    break;
+                case 'set':
+                    newBalance = amount;
+                    break;
+            }
+            
+            users[userIndex].balance = newBalance;
+            localStorage.setItem('entertainmentUsers', JSON.stringify(users));
+            
+            // 记录管理员操作
+            const adminActions = JSON.parse(localStorage.getItem('adminActions')) || [];
+            adminActions.push({
+                userId: userId,
+                username: users[userIndex].username,
+                action: action,
+                amount: amount,
+                note: note,
+                timestamp: new Date().toISOString(),
+                admin: 'developer'
+            });
+            localStorage.setItem('adminActions', JSON.stringify(adminActions));
+            
+            alert(`操作成功！用户 ${users[userIndex].username} 当前积分: ${newBalance}`);
+            loadSystemStats();
+            loadUserList();
+            
+            // 清空表单
+            document.getElementById('financeAmount').value = '';
+            document.getElementById('financeNote').value = '';
+        }
+
+        // 游戏管理
+        function setGameStatus(gameId, status) {
+            const gameStatus = JSON.parse(localStorage.getItem('gameStatus')) || {};
+            
+            if (gameId === 'all') {
+                // 设置所有游戏状态
+                gameStatus.dice = status;
+                gameStatus.slots = status;
+                gameStatus.blackjack = status;
+            } else {
+                gameStatus[gameId] = status;
+            }
+            
+            localStorage.setItem('gameStatus', JSON.stringify(gameStatus));
+            alert(`游戏状态已更新为: ${status === 'active' ? '运行中' : '维护中'}`);
+        }
+
+        // 系统管理
+        function clearAllData() {
+            if (confirm('⚠️ 高危操作！确定要清空所有用户数据吗？此操作不可逆！')) {
+                localStorage.removeItem('entertainmentUsers');
+                localStorage.removeItem('userTransactions');
+                localStorage.removeItem('adminActions');
+                alert('所有数据已清空');
+                loadSystemStats();
+                loadUserList();
+            }
+        }
+
+        function resetSystem() {
+            if (confirm('⚠️ 极高危操作！确定要重置整个系统吗？所有数据将被清除！')) {
+                localStorage.clear();
+                alert('系统已重置');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
